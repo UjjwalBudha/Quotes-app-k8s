@@ -23,7 +23,7 @@ The application is deployed in Kubernetes using a microservices architecture wit
 
 ## Prerequisites
 
-- Kubernetes cluster (local like Minikube/Kind or cloud-based)
+- Kubernetes cluster (local like k3s/microk8s or cloud-based)
 - kubectl CLI tool installed and configured
 - Docker installed (for building images locally)
 - Helm (optional, for cert-manager installation)
