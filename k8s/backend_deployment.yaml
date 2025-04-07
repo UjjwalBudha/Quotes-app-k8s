@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: backend
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: budhaujjwal/docker-k8s:api
+        ports:
+        - containerPort: 5001
+        env:
+        - name: MYSQL_HOST 
+          valueFrom:
+            configMapKeyRef:
+              name: config
+              key: database_host
+        
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-secret
+              key: password
+
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-secret
+              key: password
+              
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: my-secret
+              key: username
+
+        - name: MYSQL_DB  
+          valueFrom: 
+            configMapKeyRef:
+              name: config
+              key: database_name
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: backend
+spec:
+  # type: NodePort
+  type: ClusterIP
+  selector:
+    app: backend
+  ports:
+    - port: 5001
+      targetPort: 5001
+      # nodePort: 30008

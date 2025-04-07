@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: frontend
+data:
+  Backend_API_URL: "http://backend-service.backend.svc.cluster.local:5001"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: backend
+data:
+  database_host: "database-service.database.svc.cluster.local"
+  database_name: "ujwal"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: database
+data:
+  database_name: "ujwal"

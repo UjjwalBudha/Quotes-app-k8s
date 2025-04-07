@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: budhaujjwal/docker-k8s:frontend-latest
+        ports:
+        - containerPort: 5002
+        env:
+        - name: API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: config
+              key: Backend_API_URL
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: frontend
+spec:
+  # type: NodePort
+  type: ClusterIP
+  selector:
+    app: frontend
+  ports:
+    - port: 5002
+      targetPort: 5002
+      # nodePort: 30007
